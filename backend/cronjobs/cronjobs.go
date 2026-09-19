@@ -209,10 +209,9 @@ func SetWakeShutdownJobs(app core.App) {
 				if !isOnline {
 					return
 				}
-				status := d.GetString("status")
-				if status != "online" {
-					return
-				}
+				// The status can be stale when lazy ping marks devices offline after
+				// the last client disconnects. The reachability check above is the
+				// authoritative signal for whether a shutdown command may run.
 				d.Set("status", "pending")
 				if err := app.Save(d); err != nil {
 					log.Error("Failed to save pending device status", "device", d.GetString("name"), "error", err)
