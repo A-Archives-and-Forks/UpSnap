@@ -100,14 +100,6 @@
 			await $pocketbase
 				.collection('users')
 				.authRefresh()
-				.then(async () => {
-					// set settingsPriv store on load
-					if (!$settingsPriv) {
-						const res = await $pocketbase.collection('settings_private').getFirstListItem('');
-						settingsPriv.set(res as SettingsPrivate);
-					}
-				})
-
 				.catch((err) => {
 					// clear the store only on invalidated/expired token
 					const status = err?.status << 0;
